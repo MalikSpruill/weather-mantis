@@ -1,0 +1,122 @@
+:root {
+    --primary: #fff;
+    --secondary: #000;
+    --border-radius: 5px;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--primary);
+    font-size: 16px;
+}
+
+/* just for style assistance -delete later*/
+body > * {
+    border: solid 1px var(--secondary);
+}
+
+#parent-container {
+    height: 100%;
+    margin: 4%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* just for style assistance -delete later*/
+#parent-container > * {
+    border: solid 1px var(--secondary); 
+}
+
+#parent-container header {
+    flex: 0 10%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+#weather-container {
+    justify-content: space-between;
+    flex: 0 85%;
+}
+
+/* just for style assistance -delete later*/
+#weather-container > * {
+    border: solid 1px var(--secondary); 
+}
+
+#weather-container #city-search {
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 0 30%;
+}
+
+/* form */
+#city-search #search-field {
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 0 25%;
+}
+
+#search-field h2 {
+    font-size: 1.6rem;
+    flex: 0 30%;
+}
+
+#search-field input {
+    border-radius: var(--border-radius);
+    flex: 0 20%;
+}
+
+#search-field button {
+    border-radius: var(--border-radius);
+    flex: 0 18%;
+}
+
+#city-search #past-searches {
+    flex-direction: column;
+    border-top: 1px solid var(--secondary);
+    flex: 0 70%;
+
+}
+
+#past-searches > button {
+    border-radius: var(--border-radius);
+    margin: 2% 0;
+    flex: 0 8%;
+}
+
+#weather-container #weather-info {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 60%;
+    flex: 0 65%;
+}
+
+/* just for style assistance -delete later*/
+#weather-container #weather-info > * {
+    border: solid 1px var(--secondary); 
+}
+
+#weather-info #todays-forecast {
+    flex: 0 47%;
+}
+
+#weather-info #extended-forecast {
+    flex: 0 47%;
+
+}
+
+
+
+.flex {
+    display: flex;
+}
+
