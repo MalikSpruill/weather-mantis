@@ -58,6 +58,7 @@ body > * {
 }
 
 #weather-container #city-search {
+    border-radius: var(--border-radius);
     flex-direction: column;
     justify-content: space-around;
     flex: 0 30%;
@@ -71,7 +72,7 @@ body > * {
 }
 
 #search-field h2 {
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     flex: 0 30%;
 }
 
@@ -81,6 +82,10 @@ body > * {
 }
 
 #search-field button {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color:rgb(39, 105, 19);
+    background-color: rgb(252, 251, 183);
+    font-size: 1rem;
     border-radius: var(--border-radius);
     flex: 0 18%;
 }
@@ -93,13 +98,16 @@ body > * {
 }
 
 #past-searches > button {
+    font-family: fantasy, sans-serif;
+    font-size: 1rem;
+    background: linear-gradient(120deg,rgb(167, 253, 174), rgb(131, 199, 146));
     border-radius: var(--border-radius);
     margin: 2% 0;
     flex: 0 8%;
 }
 
 #weather-container #weather-info {
-    flex-direction: column;
+    flex-direction: column;;
     justify-content: space-between;
     height: 60%;
     flex: 0 65%;

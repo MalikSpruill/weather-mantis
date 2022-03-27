@@ -10,9 +10,14 @@ let savedCities = [];
 
 //invokes with form submission - Searches city weather
 let showWeather = function (event) {
-    event.preventDefault();
-
-    document.querySelector("#extended-forecast h2").style.display = "none";
+    
+    if (event.type == "submit") {
+        event.preventDefault();
+    }
+    
+    cityDateEl.innerHTML = "";
+    extendedForecastEl.innerHTML = "";
+    //document.querySelector("#extended-forecast h2").style.display = "none";
 
     let searchedCity = inputEl.value;
     inputEl.value = "";
@@ -25,7 +30,7 @@ let showWeather = function (event) {
     let cityStored = JSON.parse(localStorage.getItem("cities"));
       if ( cityStored == null || !cityStored.includes(searchedCity)) {
           let btnEl = document.createElement("button");
-          btnEl.textContent = searchedCity;
+          btnEl.textContent = searchedCity.charAt(0).toUpperCase() + searchedCity.slice(1); 
           searchesEl.appendChild(btnEl);
           savedCities.push(searchedCity);
           localStorage.setItem("cities",JSON.stringify(savedCities));
@@ -37,14 +42,16 @@ let showWeather = function (event) {
         let latitude = data[0];
         let longitude = data[1];
         let queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`
-        let officialWeatherData = fetch(queryURL)
+         fetch(queryURL)
         .then(response => response.ok? response.json(): console.log("Error: On first response"))
         .then( data => {
 
             //generates current weather forecast
             let todaysDate = Date();
             let formattedDate = dateFns.format(todaysDate, "MM/DD/YYYY hh:mm a");
-            cityTitleEl.innerHTML = formattedDate;
+            let currentForecastTitle = document.createElement("h2");
+            currentForecastTitle.textContent = formattedDate;
+            cityDateEl.appendChild(currentForecastTitle);
 
             let iconCode = data.current.weather[0].icon
             let iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`;
@@ -82,15 +89,10 @@ let showWeather = function (event) {
 
                 weatherDivEl.append(cardDate,cardIcon,cardTemp,cardWind);
                 extendedForecastEl.append(weatherDivEl);
-
             }
-
-            
-
             console.log(data)
         })
     })
-
 }
 
 let weatherCaster = function(searchedCity, apikey) {
@@ -126,24 +128,32 @@ let uvColor = function(uv) {
     }
 }
 
-let previouslySearched = function(event) {
-    let targetEl = event.target;
+let previouslySearched = function() {
+
     let cityStored = JSON.parse(localStorage.getItem("cities"));
-    
+    if (cityStored) {
     for (let city = 0; city < cityStored.length; city++) {
-        if (targetEl.textContent == cityStored[city]) {
-            inputEl.textContent = targetEl.textContent;
-            showWeather(event);
-        }
+        let cityBtn = document.createElement("button");
+        cityBtn.textContent = cityStored[city].charAt(0).toUpperCase() + cityStored[city].slice(1);
+        searchesEl.appendChild(cityBtn);
+    } 
     }
-    }
+}
+
+
+ let chosenPreviousCity = function(event) {
+    console.log(event.type);
+    let targetEl = event.target;
+    inputEl.value = targetEl.textContent;
+    showWeather(event);
+    } 
 
 
 
-
-
+document.addEventListener("DOMContentLoaded", previouslySearched);
+searchesEl.addEventListener("click", chosenPreviousCity);
 formEl.addEventListener("submit", showWeather);
-searchesEl.addEventListener("click",previouslySearched);
+//searchesEl.addEventListener("click",previouslySearched);
 
 //function that invokes on startup for existing saved cities
 
