@@ -3,11 +3,16 @@ let APIKey = "4beb2f3c075f29c9148fcd6830d2242d";
 let formEl = document.getElementById("search-field");
 let inputEl = document.getElementById("search-input");
 let searchesEl = document.getElementById("past-searches");
+let cityDateEl = document.getElementById("city-date");
+let extendedForecastEl = document.getElementById("extended-forecast");
+let cityTitleEl = document.querySelector("#city-date h2");
 let savedCities = [];
 
 //invokes with form submission - Searches city weather
 let showWeather = function (event) {
     event.preventDefault();
+
+    document.querySelector("#extended-forecast h2").style.display = "none";
 
     let searchedCity = inputEl.value;
     inputEl.value = "";
@@ -34,7 +39,56 @@ let showWeather = function (event) {
         let queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,hourly,alerts&units=imperial&appid=${APIKey}`
         let officialWeatherData = fetch(queryURL)
         .then(response => response.ok? response.json(): console.log("Error: On first response"))
-        .then( data => console.log(data))
+        .then( data => {
+
+            //generates current weather forecast
+            let todaysDate = Date();
+            let formattedDate = dateFns.format(todaysDate, "MM/DD/YYYY hh:mm a");
+            cityTitleEl.innerHTML = formattedDate;
+
+            let iconCode = data.current.weather[0].icon
+            let iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`;
+            let iconImageEL = document.createElement("img");
+            iconImageEL.setAttribute("src",iconUrl);
+            cityDateEl.appendChild(iconImageEL);
+
+            document.getElementById("temp").textContent = `Temp: ${data.current.temp}°F`;
+            document.getElementById("wind").textContent = `Wind: ${data.current.wind_speed} MPH`;
+            document.getElementById("humidity").textContent = `Humidity: ${data.current.humidity} %`;
+            let uv = document.getElementById("uv")
+            uv.innerHTML = `UV Index: <span>${data.current.uvi}</span>`;
+            uv.children[0].style.backgroundColor = uvColor(data.current.uvi);
+
+            //generates five-day weather forecast
+            for (let weatherCard = 1; weatherCard < 6; weatherCard++) {
+                let weatherDivEl = document.createElement("div");
+                weatherDivEl.className = "flex";
+                let cardDate = document.createElement("p");
+                let cardIcon = document.createElement("img");
+                let cardTemp = document.createElement("p");
+                let cardWind = document.createElement("p");
+                let cardHumidity = document.createElement("p");
+                let iconCodeTwo = data.daily[weatherCard].weather[0].icon
+
+                let rawDate = new Date(data.daily[weatherCard].dt * 1000).toLocaleString("en-US");
+                let formattedDateTwo = rawDate.split(",")[0];
+                formattedDateTwo.length = 8;
+                cardDate.textContent = formattedDateTwo;
+
+                cardIcon.setAttribute("src",`http://openweathermap.org/img/wn/${iconCodeTwo}.png`);
+                cardTemp.textContent = `Temp: ${data.daily[weatherCard].temp.day}°F`;
+                cardWind.textContent = `Wind: ${data.daily[weatherCard].wind_speed} MPH`;
+                cardHumidity.textContent = `Humditiy: ${data.daily[weatherCard].humidity} %`;
+
+                weatherDivEl.append(cardDate,cardIcon,cardTemp,cardWind);
+                extendedForecastEl.append(weatherDivEl);
+
+            }
+
+            
+
+            console.log(data)
+        })
     })
 
 }
@@ -45,6 +99,7 @@ let weatherCaster = function(searchedCity, apikey) {
     let data = fetch(queryURL)
     .then(response => response.ok ? response.json() : console.log("Error: On first response"))
     .then(data => {
+        console.log(data);
         let latitude = data.coord.lat;
         let longitude = data.coord.lon;
         let latitudeLon = [];
@@ -57,11 +112,38 @@ let weatherCaster = function(searchedCity, apikey) {
 }
 
 
+let uvColor = function(uv) {
+    switch(uv) {
+        case uv < 3: return "green";
+        break;
+        case uv < 5: return "yellow";
+        break;
+        case uv < 8: return "orange";
+        break;
+        case uv < 11: return "red";
+        break;
+        default: return "light-blue";
+    }
+}
+
+let previouslySearched = function(event) {
+    let targetEl = event.target;
+    let cityStored = JSON.parse(localStorage.getItem("cities"));
+    
+    for (let city = 0; city < cityStored.length; city++) {
+        if (targetEl.textContent == cityStored[city]) {
+            inputEl.textContent = targetEl.textContent;
+            showWeather(event);
+        }
+    }
+    }
+
 
 
 
 
 formEl.addEventListener("submit", showWeather);
+searchesEl.addEventListener("click",previouslySearched);
 
 //function that invokes on startup for existing saved cities
 
