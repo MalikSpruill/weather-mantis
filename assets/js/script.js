@@ -58,9 +58,9 @@ let showWeather = function (event) {
             document.getElementById("temp").textContent = `Temp: ${data.current.temp}°F`;
             document.getElementById("wind").textContent = `Wind: ${data.current.wind_speed} MPH`;
             document.getElementById("humidity").textContent = `Humidity: ${data.current.humidity} %`;
-            let uv = document.getElementById("uv")
-            uv.innerHTML = `UV Index: <span>${data.current.uvi}</span>`;
-            uv.children[0].style.backgroundColor = uvColor(data.current.uvi);
+            let uv = document.querySelector("#uv span");
+            uv.innerHTML = `${data.current.uvi}`;
+            uv.style.backgroundColor = `${uvColor(data.current.uvi)}`;
 
             //generates five-day weather forecast
             for (let weatherCard = 1; weatherCard < 6; weatherCard++) {
@@ -109,17 +109,21 @@ let weatherCaster = function(searchedCity, apikey) {
     return data;
 }
 
-let uvColor = function(uv) {
-    switch(uv) {
-        case uv < 3: return "green";
-        break;
-        case uv < 5: return "yellow";
-        break;
-        case uv < 8: return "orange";
-        break;
-        case uv < 11: return "red";
-        break;
-        default: return "light-blue";
+let uvColor = function(uvi) {
+    if (uvi < 3) {
+        return "green";
+    }
+    else if (uvi < 5) {
+        return "yellow";
+    }
+    else if (uvi < 8) {
+        return "orange";
+    }
+    else if (uvi < 11) {
+        return "red";
+    }
+    else {
+        return "blueviolet";
     }
 }
 
