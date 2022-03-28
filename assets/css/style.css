@@ -169,5 +169,38 @@ body {
 }
 
 @media screen and (max-width: 575px) {
+    #parent-container {
+        margin: 0;
+    }
+    #parent-container header {
+        width: 100%;
+    }
+    #weather-container {
+        flex-direction: column;
+    }
+    #search-field h2 {
+        text-align: center;
+    }
+    #weather-container #city-search {
+        width: 100%;
+        justify-content: center;
+    }
+    #search-field input, #search-field button, #past-searches > button  {
+        width: 80%;
+        margin: 10px auto;
+        padding: 5px;
 
+    }
+    #city-search #past-searches {
+       flex-direction: row;
+    }
+    #past-searches button {
+        border-radius: 10%;
+        height: 30%;
+        flex: 0 15%;
+        font-size: 0.8rem;
+    }
+    #extended-forecast > * {
+        height: 70%;
+    }
 }

@@ -15,7 +15,7 @@ let showWeather = function (event) {
     cityDateEl.innerHTML = "";
     extendedForecastEl.innerHTML = "";
 
-    let searchedCity = inputEl.value;
+    let searchedCity = inputEl.value.toLowerCase();
     inputEl.value = "";
     if (searchedCity === "") {
        inputEl.setAttribute("placeholder", "Search an actual city!");
@@ -24,7 +24,7 @@ let showWeather = function (event) {
 
     // store cities that aren't yet saved
     let cityStored = JSON.parse(localStorage.getItem("cities"));
-      if ( cityStored == null || !cityStored.includes(searchedCity)) {
+      if ( cityStored == null || !cityStored.includes(searchedCity) || !cityStored.includes(searchedCity)) {
           let btnEl = document.createElement("button");
           btnEl.textContent = searchedCity.charAt(0).toUpperCase() + searchedCity.slice(1); 
           searchesEl.appendChild(btnEl);
